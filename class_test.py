@@ -92,3 +92,44 @@ class Sample(Speaker, Student):
 test = Sample('Krry', 25, 70, 4, 'Python')
 test.speak()  # 方法名同，默认调用的是在括号中参数位置排前父类的方法
 test.lecture()
+
+# 当内部作用域想修改外部作用域的变量时，就要用到 global 和 nonlocal 关键字了。当然也可以通过传递参数
+numpo = 1
+
+
+def changenum():
+    global numpo
+    print(numpo)
+    numpo = 123
+
+
+changenum()
+print(numpo)
+
+
+# 如果要修改嵌套作用域（enclosing 作用域，外层非全局作用域）中的变量则需要 nonlocal 关键字了，如下实例：
+def outer():
+    num = 10
+
+    def inner():
+        nonlocal num  # nonlocal关键字声明
+        num = 100
+        print(num)
+
+    inner()
+    print(num)
+
+
+outer()
+
+from datetime import date
+
+now = date.today()
+print(now)
+print(date(2022, 2, 22))
+
+print(list(range(1, 10)))
+for x in range(1, 10):
+    for y in range(1, x + 1):
+        print('{}*{}={}\t'.format(y, x, x * y), end="")
+    print()
