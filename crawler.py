@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup as bf  # 解析html
 import requests
 import re
 
-
+# vmgirls 清纯少女图
 def get_vmgirls():
     html = urlopen('https://www.vmgirls.com')
     obj = bf(html.read(), 'html.parser')
@@ -26,7 +26,7 @@ def get_vmgirls():
             print('downloading-->' + file_name)
         print(url)
 
-
+# bilibili 娱乐直播封面图
 def get_bi_lives():
     req_data = {'platform': 'web', 'parent_area_id': 1, 'area_id': 0, 'sort_type': 'sort_type_224', 'page': 1}
     for i in range(1, 10):
@@ -37,10 +37,43 @@ def get_bi_lives():
         for x in blog_list:
             cover_suffix = x['cover'].split('.').pop()
             face_suffix = x['face'].split('.').pop()
-            urlretrieve(x['cover'], 'download/{}-封面图{}'.format(x['title'], cover_suffix))
-            urlretrieve(x['face'], 'download/{}-头像{}'.format(x['title'], face_suffix))
+            urlretrieve(x['cover'], 'download/{}-封面图.{}'.format(x['title'], cover_suffix))
+            urlretrieve(x['face'], 'download/{}-头像.{}'.format(x['title'], face_suffix))
             print(x['cover'], i)
 
 
 # requests.post(url='https://www.vmgirls.com/wp-admin/admin-ajax.php')
-get_bi_lives()
+# get_bi_lives()
+
+# 获取 36壁纸
+def get_36bizi():
+    page_url = [
+        'https://www.3gbizhi.com/meinv/mn1839.html',
+        'https://www.3gbizhi.com/meinv/mn1567.html',
+        'https://www.3gbizhi.com/meinv/mn1842.html',
+        'https://www.3gbizhi.com/meinv/mn1831.html',
+        'https://www.3gbizhi.com/meinv/mn1396.html',
+        'https://www.3gbizhi.com/meinv/mn1766.html',
+        'https://www.3gbizhi.com/meinv/mn1351.html',
+        'https://www.3gbizhi.com/meinv/mn1844.html'
+    ]
+    for html_url in page_url:
+        html = urlopen(html_url)
+        obj = bf(html.read(), 'html.parser')
+
+        pic_info = obj.find_all('img', src=re.compile(r'http'))
+        print(pic_info)
+        for img in pic_info:
+            url = img['src']
+            if 'thumb' in url:
+                temp = url.split('/')
+                suffix = temp.pop().split('_').pop()
+                prefix = '/'.join(temp)  # 列表转字符串
+                url = prefix + '/' + suffix
+            file_name = url.split('/')[-1]
+            # file_name = url.split('/').pop()
+            urlretrieve(url, 'download/{}'.format(file_name))
+            print(url)
+
+
+get_36bizi()
