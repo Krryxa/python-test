@@ -2,6 +2,8 @@ from urllib.request import urlopen, urlretrieve  # url
 from bs4 import BeautifulSoup as bf  # 解析html
 import requests
 import re
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 # vmgirls 清纯少女图
 def get_vmgirls():
@@ -58,7 +60,8 @@ def get_36bizi():
         'https://www.3gbizhi.com/meinv/mn1396.html',
         'https://www.3gbizhi.com/meinv/mn1766.html',
         'https://www.3gbizhi.com/meinv/mn1351.html',
-        'https://www.3gbizhi.com/meinv/mn1844.html'
+        'https://www.3gbizhi.com/meinv/mn1844.html',
+        'https://www.3gbizhi.com/meinv/mn1389.html'
     ]
     for html_url in page_url:
         html = urlopen(html_url)
