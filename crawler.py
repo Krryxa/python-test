@@ -5,15 +5,16 @@ import re
 
 # vmgirls 清纯少女图
 def get_vmgirls():
-    html = urlopen('https://www.vmgirls.com')
+    html = urlopen('https://www.vmgirls.net')
     obj = bf(html.read(), 'html.parser')
     print(obj.head.title)
 
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36'
     }
-    pic_info = obj.find_all('a', style=re.compile(r'background-image'))
+    pic_info = obj.find_all(attrs={'class': 'media-content'}, style=re.compile(r'background-image'))
     print(pic_info)
+    count = 0
     for img in pic_info:
         # file_name = img['src'].split('/')[-1]
         temp = img['style'].split('//').pop()
@@ -24,12 +25,16 @@ def get_vmgirls():
         with open('download/' + file_name, 'wb') as f:
             f.write(image)
             print('downloading-->' + file_name)
+            count += 1
         print(url)
+    print('总下载数：', count)
+
+# get_vmgirls()
 
 # bilibili 娱乐直播封面图
 def get_bi_lives():
     req_data = {'platform': 'web', 'parent_area_id': 1, 'area_id': 0, 'sort_type': 'sort_type_224', 'page': 1}
-    for i in range(1, 10):
+    for i in range(1, 7):
         req_data['page'] = i
         res = requests.get('https://api.live.bilibili.com/xlive/web-interface/v1/second/getList', params=req_data)
         json_res = res.json()
@@ -41,8 +46,6 @@ def get_bi_lives():
             urlretrieve(x['face'], 'download/{}-头像.{}'.format(x['title'], face_suffix))
             print(x['cover'], i)
 
-
-# requests.post(url='https://www.vmgirls.com/wp-admin/admin-ajax.php')
 # get_bi_lives()
 
 # 获取 36壁纸
@@ -74,6 +77,5 @@ def get_36bizi():
             # file_name = url.split('/').pop()
             urlretrieve(url, 'download/{}'.format(file_name))
             print(url)
-
 
 get_36bizi()
