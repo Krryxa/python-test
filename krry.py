@@ -65,11 +65,12 @@ fr.close()
 # 迭代一个文件对象读取每行
 fr = open('test.md')
 for line in fr:
-    print(line, end='')
+    print(line, end='')  # end='' 意思是不换行，末尾加'' 
 
 print()
 
-print('---------异常---------')
+print('---------异常 try except---------')
+# try：执行代码 except：捕获异常 finally：不管有没有异常都执行
 while True:
     try:
         x = int(input('请输入一个整数'))
@@ -78,4 +79,14 @@ while True:
         print('你输入的不是整数')
         raise Exception('我需要一个整数！！！')  # 抛出异常
 
-# try：执行代码 except：捕获异常 else：没有异常情况下执行 finally：不管有没有异常都执行
+try_file = open('./test.txt', 'w')
+try:
+    try_file.write('hello world')
+finally:
+    try_file.close()  # 要手动调用 f.close() 方法关闭
+
+print('---------异常 with---------')
+# 使用 with 关键字系统会自动调用 f.close() 方法
+with open('./test.txt', 'w') as with_file:
+    with_file.write('hello world !')
+print('文件是否关闭：', with_file.closed)
